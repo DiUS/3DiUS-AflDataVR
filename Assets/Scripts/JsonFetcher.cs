@@ -1,45 +1,46 @@
-﻿using LitJson;
-using System;
-using UnityEngine;
+﻿using System;
 using System.Collections;
-using System.Net;
-using System.IO;
-using System.Text;
-using CielaSpike;
+using UnityEngine;
 
 public class JsonFetcher : MonoBehaviour
 {
 	string dataType;
 
-	public delegate void JsonPlayerData (JsonReader json);
+	public delegate void JsonPlayerData (string json);
 	public static event JsonPlayerData jsonPlayerData;
-	public delegate void JsonPlayerStatsData (JsonReader json,GameObject g);
+    public delegate void JsonPlayerStatsData (string json, GameObject g);
 	public static event JsonPlayerStatsData jsonPlayerStatsData;
-
-	IEnumerator FetchJson (string url, GameObject g)
-	{
-		string data;
-		using (WebClient client = new WebClient()) {
-			data = client.DownloadString (url);
-		}
-
-		yield return Ninja.JumpToUnity;
-		JsonReader json = new JsonReader (data);
-		Notify (json, g);
-	}
 
 	public void GetJson (string url, string type, GameObject planet = null)
 	{
 		dataType = type;
-		this.StartCoroutineAsync (FetchJson (url, planet));
-	}
+        StartCoroutine(GetUrlData(url, planet));
+    }
 
-	void Notify (JsonReader json, GameObject g)
+    IEnumerator GetUrlData(string url, GameObject planet)
+    {
+        WWW web = new WWW(url);
+        while (!web.isDone)
+        {
+            yield return null;
+        }
+
+        if (web.error != null)
+        {
+            Debug.Log("Server Error: " + web.error);
+        }
+        else
+        {
+            Notify (web.text, planet);
+        }
+    }
+
+    void Notify (string json, GameObject planet)
 	{
 		if (dataType == "players")
 			jsonPlayerData (json);
 		else
-			jsonPlayerStatsData (json, g);
+            jsonPlayerStatsData (json, planet);
 
 	}
 }

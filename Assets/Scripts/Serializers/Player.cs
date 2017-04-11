@@ -1,4 +1,5 @@
-﻿public class Player
+﻿[System.Serializable]
+public class Player
 {
 	public int id;
 	public string first_name;
@@ -16,5 +17,4 @@
 	public int supercoach;
 	public int afl_fantasy;
 	public string url;
-
 }

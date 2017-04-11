@@ -1,5 +1,4 @@
-﻿using LitJson;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 public class Players : MonoBehaviour
@@ -35,15 +34,17 @@ public class Players : MonoBehaviour
 		fetcher.GetJson (Urls.players_for_team (teamId.ToString ()), "players");
 	}
 
-	void ReadPlayerData (JsonReader json)
+	void ReadPlayerData (string json)
 	{
 		planets = new GameObject ("planets");
 		float distanceFromSun = Sun.transform.localScale.x / 2; 
 
-		Player[] jsonObject = JsonMapper.ToObject<Player[]> (json);
-		foreach (var player in jsonObject) {
+        // https://forum.unity3d.com/threads/how-to-load-an-array-with-jsonutility.375735/
+        PlayerCollection playerCollection = JsonUtility.FromJson<PlayerCollection>("{ \"players\": " + json + "}");
+        for (int x = 0; x < playerCollection.players.Length; x++ ) {
 
-			int games = player.games;
+            Player player = playerCollection.players[x];
+            int games = player.games;
 			int diameter = Int16.Parse (player.height.Substring (0, 3)) / 10; 
 
 			// pointless showing people who have not played yet!

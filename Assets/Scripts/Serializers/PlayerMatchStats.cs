@@ -1,0 +1,39 @@
+﻿[System.Serializable]
+public class PlayerMatchStats
+{
+    public int id;
+    public int player_id;
+    public int year;
+    public int team_id;
+    public int games;
+    public int kicks;
+    public int handballs;
+    public int disposals;
+    public int marks;
+    public int goals;
+    public int behinds;
+    public int tackles;
+    public int hitouts;
+    public int frees_for;
+    public int frees_against;
+    public int brownlow;
+    public int contested_posessions;
+    public int uncontested_posessions;
+    public int effective_disposals;
+    public int effective_disposals_percentage;
+    public int clangers;
+    public int contested_marks;
+    public int goal_assists;
+    public int inside_50s;
+    public int marks_inside_50;
+    public int clearances;
+    public int rebound_50s;
+    public int one_percenters;
+    public int bounces;
+    public int time_on_ground;
+    public int supercoach;
+    public int afl_fantasy;
+    public int match_id;
+    public int opposition_id;
+    public string match;
+}

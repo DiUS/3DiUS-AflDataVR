@@ -1,5 +1,4 @@
-﻿using LitJson;
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,10 +33,11 @@ public class PlayerStats : MonoBehaviour
 		fetcher.GetJson (Urls.player_stats (playerId.ToString ()), "stats", planet);
 	}
 
-	void ReadPlayerData (JsonReader json, GameObject playerPlanet)
+	void ReadPlayerData (string json, GameObject playerPlanet)
 	{
-		JsonData data = JsonMapper.ToObject (json);
-		int count = data ["stats"].Count;
+        PlayerMatchStatsCollection playerStatsCollection = JsonUtility.FromJson<PlayerMatchStatsCollection>(json);
+            
+        int count = playerStatsCollection.stats.Length;
 		float rowNum = (int)Mathf.Floor (Mathf.Sqrt (count));
 		float maxX = rowNum / 2; 
 		float x = -1 * maxX;
@@ -48,7 +48,7 @@ public class PlayerStats : MonoBehaviour
 		cityBlock.AddComponent<MeshRenderer> ();
 
 		for (int i = 0; i < count; i++) {
-			float height = (int)data ["stats"] [i] ["disposals"];
+            float height = playerStatsCollection.stats[i].disposals;
 			Vector3 pos = new Vector3 (x++, 0, z);
 			GameObject building = (GameObject)Instantiate (pillar, pos, Quaternion.identity);
 			building.transform.localScale = new Vector3 (0.9f, height, 0.9f);
